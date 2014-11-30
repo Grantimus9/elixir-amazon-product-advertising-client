@@ -7,7 +7,7 @@ defmodule AmazonProductAdvertisingClient do
     "Service"         => "AWSECommerceService",
     "Version"         => "2013-08-01",
     "AWSAccessKeyId"  => Application.get_env(:amazon_product_advertising_client, :aws_access_key_id),
-    "AWSAssociateTag" => Application.get_env(:amazon_product_advertising_client, :aws_associate_tag),
+    "AssociateTag"    => Application.get_env(:amazon_product_advertising_client, :associate_tag),
   }
 
   def item_search(search_term) do
