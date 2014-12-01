@@ -20,7 +20,8 @@ defmodule AmazonProductAdvertisingClient do
 
   defp call_api(params) do
     params = Map.put params, "Timestamp", DateFormat.format!(Date.local, "{ISOz}")
-    get "#{@url}?#{URI.encode_query Map.merge(@params, params)}"
+    query = Map.merge(@params, params) |> Enum.sort |> URI.encode_query
+    get "#{@url}?#{query}"
   end
 
   defp sign_request(url) do
@@ -30,8 +31,6 @@ defmodule AmazonProductAdvertisingClient do
         Application.get_env(:amazon_product_advertising_client, :aws_secret_access_key),
         construct_request url
       )
-      |> :crypto.bytes_to_integer
-      |> Integer.to_string(16)
       |> Base.encode64
       |> URI.encode_www_form
     "#{url}&Signature=#{signature}"
@@ -39,7 +38,6 @@ defmodule AmazonProductAdvertisingClient do
 
   defp construct_request(url) do
     url_parts = URI.parse url
-    query = url_parts.query |> URI.query_decoder |> Enum.sort |> URI.encode_query
-    Enum.join ["GET", url_parts.host, url_parts.path, query], "\n"
+    Enum.join ["GET", url_parts.host, url_parts.path, url_parts.query], "\n"
   end
 end
