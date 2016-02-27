@@ -9,7 +9,7 @@ defmodule AmazonProductAdvertisingClient do
   @path   "/onca/xml"
 
   def call_api(request_params, config \\ %Config{}) do
-    query = [request_params, config] |> combine_params |> URI.encode_query
+    query = [request_params, config] |> combine_params |> percent_encode_query
     get %URI{scheme: @scheme, host: @host, path: @path, query: query}
   end
 
@@ -27,12 +27,29 @@ defmodule AmazonProductAdvertisingClient do
     timestamped_query = url_parts.query
                         |> URI.decode_query
                         |> Map.put_new("Timestamp", DateFormat.format!(Date.local, "{ISOz}"))
-                        |> URI.encode_query
+                        |> percent_encode_query
     Map.put url_parts, :query, timestamped_query
   end
 
+  @doc """
+  `URI.encode_query/1` explicitly does not percent-encode spaces, but Amazon requires `%20`
+  instead of `+` in the query, so we essentially have to rewrite `URI.encode_query/1` and
+  `URI.pair/1`.
+  """
+  defp percent_encode_query(query_map) do
+    Enum.map_join(query_map, "&", &pair/1)
+  end
+
+  @doc"""
+  See comment on `percent_encode_query/1`.
+  """
+  defp pair({k, v}) do
+    URI.encode(Kernel.to_string(k), &URI.char_unreserved?/1) <>
+    "=" <> URI.encode(Kernel.to_string(v), &URI.char_unreserved?/1)
+  end
+
   defp sign_url(url_parts) do
-    ordered_query = url_parts.query |> URI.decode_query |> Enum.sort |> URI.encode_query
+    ordered_query = url_parts.query |> URI.decode_query |> Enum.sort |> percent_encode_query
     signature =
       :crypto.hmac(
         :sha256,

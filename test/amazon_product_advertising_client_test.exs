@@ -12,4 +12,14 @@ defmodule AmazonProductAdvertisingClientTest do
     signed = "http://webservices.amazon.com/onca/xml?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&ItemId=0679722769&Operation=ItemLookup&ResponseGroup=ItemAttributes%2COffers%2CImages%2CReviews&Service=AWSECommerceService&Timestamp=2009-01-01T12%3A00%3A00Z&Version=2009-01-06&Signature=M%2Fy0%2BEAFFGaUAp4bWv%2FWEuXYah99pVsxvqtAuC8YN7I%3D"
     assert signed == AmazonProductAdvertisingClient.process_url unsigned
   end
+
+  test "spaces are percent-encoded in query" do
+    Application.put_env(:amazon_product_advertising_client, :aws_secret_access_key, "1234567890")
+
+    percent_encoded_query = "http://example.com?Thing=this%20has%20spaces&Timestamp=nil"
+    plus_encoded_query = "http://example.com?Thing=this+has+spaces&Timestamp=nil"
+    signature = "&Signature=TbUaESXKcgIMPilrE%2FVlj3suzNVxXjobGij7UTuL1oA%3D"
+    assert percent_encoded_query <> signature ==
+      AmazonProductAdvertisingClient.process_url plus_encoded_query
+  end
 end
