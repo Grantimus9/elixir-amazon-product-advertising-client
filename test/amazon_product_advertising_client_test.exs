@@ -16,10 +16,8 @@ defmodule AmazonProductAdvertisingClientTest do
   test "spaces are percent-encoded in query" do
     Application.put_env(:amazon_product_advertising_client, :aws_secret_access_key, "1234567890")
 
-    percent_encoded_query = "http://example.com?Thing=this%20has%20spaces&Timestamp=nil"
-    plus_encoded_query = "http://example.com?Thing=this+has+spaces&Timestamp=nil"
-    signature = "&Signature=TbUaESXKcgIMPilrE%2FVlj3suzNVxXjobGij7UTuL1oA%3D"
-    assert percent_encoded_query <> signature ==
-      AmazonProductAdvertisingClient.process_url plus_encoded_query
+    percent_encoded_query = "http://example.com?Thing=this%20has%20spaces&Timestamp=fake&Signature=fake"
+    plus_encoded_query = "http://example.com?Thing=this+has+spaces&Timestamp=fake&Signature=fake"
+    assert percent_encoded_query == AmazonProductAdvertisingClient.process_url plus_encoded_query
   end
 end
