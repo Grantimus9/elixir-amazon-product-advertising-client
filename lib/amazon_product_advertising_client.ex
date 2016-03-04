@@ -41,33 +41,24 @@ defmodule AmazonProductAdvertisingClient do
   end
 
   defp timestamp_url(url_parts) do
-    timestamped_query = url_parts.query
-                        |> URI.decode_query
-                        |> Map.put_new("Timestamp", DateFormat.format!(Date.local, "{ISOz}"))
-                        |> percent_encode_query
-    Map.put url_parts, :query, timestamped_query
+    update_url url_parts, "Timestamp", DateFormat.format!(Date.local, "{ISOz}")
   end
 
   defp sign_url(url_parts) do
-    query = URI.decode_query url_parts.query
-
-    # If the query already has a Signature param, don't calculate the signature.
-    # (This is mostly for testing purposes).
-    signature = if Map.has_key? query, "Signature" do
-      {signature_value, query} = Map.pop query, "Signature" 
-      query = percent_encode_query query
-      signature_value
-    else
-      query = percent_encode_query query
-      :crypto.hmac(
+    signature = :crypto.hmac(
         :sha256,
         Application.get_env(:amazon_product_advertising_client, :aws_secret_access_key),
-        Enum.join(["GET", url_parts.host, url_parts.path, query], "\n")
+        Enum.join(["GET", url_parts.host, url_parts.path, url_parts.query], "\n")
       )
       |> Base.encode64
-      |> URI.encode_www_form
-    end
-    signed_query = "#{query}&Signature=#{signature}"
-    Map.put url_parts, :query, signed_query
+    update_url url_parts, "Signature", signature
+  end
+
+  defp update_url(url_parts, key, value) do
+    updated_query = url_parts.query
+                        |> URI.decode_query
+                        |> Map.put_new(key, value)
+                        |> percent_encode_query
+    Map.put url_parts, :query, updated_query
   end
 end
