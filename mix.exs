@@ -9,14 +9,14 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :tzdata]]
   end
 
   defp deps do
     [
-      {:httpoison, "~> 0.5"},
-      {:sweet_xml, "~> 0.1"},
-      {:timex, "~> 0.13"}
+      {:httpoison, "~> 0.8.1"},
+      {:sweet_xml, "~> 0.6.1"},
+      {:timex, "~> 1.0"}
     ]
   end
 end
