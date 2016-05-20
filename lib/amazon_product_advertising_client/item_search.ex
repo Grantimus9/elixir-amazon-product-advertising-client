@@ -1,18 +1,21 @@
 defmodule AmazonProductAdvertisingClient.ItemSearch do
-  alias __MODULE__ 
+  alias __MODULE__
   alias AmazonProductAdvertisingClient.Config
 
   def __struct__ do
     %{
       "Availability"  => "Available",
       "BrowseNode"    => nil,
+      "BrowseNodeId"  => nil,
       "Condition"     => "New",
+      "ItemPage"      => nil,
       "Keywords"      => nil,
       "Operation"     => "ItemSearch",
       "MaximumPrice"  => nil,
       "MinimumPrice"  => nil,
       "ResponseGroup" => nil,
       "SearchIndex"   => nil,
+      "Sort"          => nil,
       "ResponseGroup" => nil,
       "Title"         => nil,
     }
