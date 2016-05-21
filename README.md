@@ -1,8 +1,8 @@
 Amazon Product Advertising Client
 ================================
+[![Build Status](https://travis-ci.org/zachgarwood/elixir-amazon-product-advertising-client.svg?branch=master)](https://travis-ci.org/zachgarwood/elixir-amazon-product-advertising-client)
 
-Configure
-=========
+# Configure
 Add your AWS authentication credentials to `config/config.exs`:
 
 ```
