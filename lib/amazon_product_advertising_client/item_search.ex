@@ -7,13 +7,13 @@ defmodule AmazonProductAdvertisingClient.ItemSearch do
       "Condition": "New",
       "ItemPage": nil,
       "Keywords": nil,
-      "Operation": "ItemSearch",
       "MaximumPrice": nil,
       "MinimumPrice": nil,
+      "Operation": "ItemSearch",
+      "ResponseGroup": nil,
       "ResponseGroup": nil,
       "SearchIndex": nil,
       "Sort": nil,
-      "ResponseGroup": nil,
       "Title": nil
 
   def execute(search_params \\ %ItemSearch{}, config \\ %Config{}) do
