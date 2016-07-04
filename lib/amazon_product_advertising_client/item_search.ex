@@ -1,5 +1,5 @@
 defmodule AmazonProductAdvertisingClient.ItemSearch do
-  alias __MODULE__ 
+  alias __MODULE__
   alias AmazonProductAdvertisingClient.Config
 
   def __struct__ do
@@ -15,6 +15,7 @@ defmodule AmazonProductAdvertisingClient.ItemSearch do
       "SearchIndex"   => nil,
       "ResponseGroup" => nil,
       "Title"         => nil,
+      "Sort"          => nil,
     }
   end
 
