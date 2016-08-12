@@ -1,4 +1,6 @@
 defmodule AmazonProductAdvertisingClient.ItemSearch do
+  @moduledoc false
+
   alias __MODULE__
   alias AmazonProductAdvertisingClient.Config
   defstruct "Availability": "Available",
