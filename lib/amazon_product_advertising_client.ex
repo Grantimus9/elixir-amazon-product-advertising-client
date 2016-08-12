@@ -1,8 +1,10 @@
 defmodule AmazonProductAdvertisingClient do
-  alias AmazonProductAdvertisingClient.Config
+  @moduledoc false
 
   use HTTPoison.Base
   use Timex
+
+  alias AmazonProductAdvertisingClient.Config
 
   @scheme "http"
   @host   "webservices.amazon.com"
@@ -41,12 +43,12 @@ defmodule AmazonProductAdvertisingClient do
   end
 
   defp sign_url(url_parts) do
-    signature = :crypto.hmac(
+    hmac = :crypto.hmac(
         :sha256,
         Application.get_env(:amazon_product_advertising_client, :aws_secret_access_key),
         Enum.join(["GET", url_parts.host, url_parts.path, url_parts.query], "\n")
       )
-      |> Base.encode64
+    signature = Base.encode64(hmac)
     update_url url_parts, "Signature", signature
   end
 
