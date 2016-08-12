@@ -19,18 +19,14 @@ defmodule AmazonProductAdvertisingClient do
     end
   end
 
-  @doc """
-  `URI.encode_query/1` explicitly does not percent-encode spaces, but Amazon requires `%20`
-  instead of `+` in the query, so we essentially have to rewrite `URI.encode_query/1` and
-  `URI.pair/1`.
-  """
+  # `URI.encode_query/1` explicitly does not percent-encode spaces, but Amazon requires `%20`
+  # instead of `+` in the query, so we essentially have to rewrite `URI.encode_query/1` and
+  # `URI.pair/1`.
   defp percent_encode_query(query_map) do
     Enum.map_join(query_map, "&", &pair/1)
   end
 
-  @doc """
-  See comment on `percent_encode_query/1`.
-  """
+  # See comment on `percent_encode_query/1`.
   defp pair({k, v}) do
     URI.encode(Kernel.to_string(k), &URI.char_unreserved?/1) <>
     "=" <> URI.encode(Kernel.to_string(v), &URI.char_unreserved?/1)
@@ -41,7 +37,7 @@ defmodule AmazonProductAdvertisingClient do
   end
 
   defp timestamp_url(url_parts) do
-    update_url url_parts, "Timestamp", DateFormat.format!(Date.local, "{ISOz}")
+    update_url url_parts, "Timestamp", Timex.format!(Timex.local, "{ISO:Extended:Z}")
   end
 
   defp sign_url(url_parts) do
