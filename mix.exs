@@ -23,6 +23,7 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
   defp deps do
     [
       {:dogma, "~> 0.1", only: :dev},
+      {:ex_doc, "~> 0.12", only: :dev},
       {:httpoison, "~> 0.9"},
       {:sweet_xml, "~> 0.6"},
       {:timex, "~> 3.0"},
