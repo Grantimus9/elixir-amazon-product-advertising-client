@@ -3,7 +3,7 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
 
   def project do
     [app: :amazon_product_advertising_client,
-     version: "0.1.2",
+     version: "0.1.3",
      elixir: "~> 1.3",
      description: "An Amazon Product Advertising API client for Elixir",
      package: package,
