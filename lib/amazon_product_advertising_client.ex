@@ -39,7 +39,7 @@ defmodule AmazonProductAdvertisingClient do
   end
 
   defp timestamp_url(url_parts) do
-    update_url url_parts, "Timestamp", Timex.format!(Timex.local, "{ISO:Extended:Z}")
+    update_url url_parts, "Timestamp", Timex.format!(DateTime.local, "{ISOz}")
   end
 
   defp sign_url(url_parts) do
