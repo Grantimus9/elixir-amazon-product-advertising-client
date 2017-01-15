@@ -7,7 +7,8 @@ defmodule AmazonProductAdvertisingClient do
   alias AmazonProductAdvertisingClient.Config
 
   @scheme "http"
-  @host   "webservices.amazon.com"
+  @host    Application.get_env(:amazon_product_advertising_client, :marketplace_host) ||
+    "webservices.amazon.com"
   @path   "/onca/xml"
 
   def call_api(request_params, config \\ %Config{}) do
