@@ -6,8 +6,8 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
      version: "0.1.3",
      elixir: "~> 1.3",
      description: "An Amazon Product Advertising API client for Elixir",
-     package: package,
-     deps: deps]
+     package: package(),
+     deps: deps()]
   end
 
   def application do
