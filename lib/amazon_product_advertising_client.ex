@@ -1,5 +1,7 @@
 defmodule AmazonProductAdvertisingClient do
-  @moduledoc false
+  @moduledoc """
+  An Amazon Product Advertising API client for Elixir
+  """
 
   use HTTPoison.Base
   use Timex
@@ -10,6 +12,9 @@ defmodule AmazonProductAdvertisingClient do
   @host    Application.get_env(:amazon_product_advertising_client, :marketplace_host, "webservices.amazon.com")
   @path   "/onca/xml"
 
+  @doc """
+  Make a call to the API with the specified request parameters.
+  """
   def call_api(request_params, config \\ %Config{}) do
     query = [request_params, config] |> combine_params |> percent_encode_query
     get %URI{scheme: @scheme, host: @host, path: @path, query: query}

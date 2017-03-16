@@ -1,10 +1,8 @@
 defmodule AmazonProductAdvertisingClientTest do
   use ExUnit.Case, async: true
 
-  @doc """
-  Taken from the Example REST Requests page of the Product Advertising API documentation:
-  http://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
-  """
+  # Taken from the Example REST Requests page of the Product Advertising API documentation:
+  # http://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
   test "the request is properly signed" do
     Application.put_env(:amazon_product_advertising_client, :aws_secret_access_key, "1234567890")
 
