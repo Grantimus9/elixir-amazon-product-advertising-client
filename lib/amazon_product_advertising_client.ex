@@ -15,9 +15,9 @@ defmodule AmazonProductAdvertisingClient do
   @doc """
   Make a call to the API with the specified request parameters.
   """
-  def call_api(request_params, config \\ %Config{}) do
+  def call_api(request_params, config \\ %Config{}, host) do
     query = [request_params, config] |> combine_params |> percent_encode_query
-    get %URI{scheme: @scheme, host: @host, path: @path, query: query}
+    get %URI{scheme: @scheme, host: host, path: @path, query: query}
   end
 
   defp combine_params(params_list) do

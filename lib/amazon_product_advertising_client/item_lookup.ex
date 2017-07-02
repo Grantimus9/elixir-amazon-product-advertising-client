@@ -22,7 +22,7 @@ defmodule AmazonProductAdvertisingClient.ItemLookup do
   @doc """
   Execute an ItemLookup operation
   """
-  def execute(search_params \\ %ItemLookup{}, config \\ %Config{}) do
-    AmazonProductAdvertisingClient.call_api search_params, config
+  def execute(search_params \\ %ItemLookup{}, config \\ %Config{}, host) do
+    AmazonProductAdvertisingClient.call_api search_params, config, host
   end
 end
