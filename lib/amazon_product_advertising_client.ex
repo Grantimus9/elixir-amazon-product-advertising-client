@@ -20,6 +20,19 @@ defmodule AmazonProductAdvertisingClient do
     get %URI{scheme: @scheme, host: @host, path: @path, query: query}
   end
 
+  def call_api2(request_params, config \\ %Config{}) do
+    query = [request_params, config] |> combine_params2 |> percent_encode_query
+    get %URI{scheme: @scheme, host: @host, path: @path, query: query}
+  end
+
+
+  defp combine_params2(params_list) do
+    List.foldl params_list, Map.new, fn(params, all_params) ->
+      Map.merge params, all_params
+    end
+  end
+
+
   defp combine_params(params_list) do
     List.foldl params_list, Map.new, fn(params, all_params) ->
       Map.merge Map.from_struct(params), all_params
@@ -35,6 +48,7 @@ defmodule AmazonProductAdvertisingClient do
 
   # See comment on `percent_encode_query/1`.
   defp pair({k, v}) do
+    IO.inspect(v)
     URI.encode(Kernel.to_string(k), &URI.char_unreserved?/1) <>
     "=" <> URI.encode(Kernel.to_string(v), &URI.char_unreserved?/1)
   end
