@@ -31,7 +31,7 @@ defmodule AmazonProductAdvertisingClient.CartCreate do
     # IO.inspect(map_params[:Items])
     #IO.inspect(format_item_params(map_params[:Items]))
 
-    formatted_params = Map.merge(format_item_params(map_params[:Items]),Map.delete(map_params, :Items))
-    AmazonProductAdvertisingClient.call_api2 formatted_params,  Map.from_struct(config)
+    formatted_params = Map.merge(format_item_params(map_params[:Items]), Map.delete(map_params, :Items))
+    AmazonProductAdvertisingClient.call_api formatted_params,  Map.from_struct(config)
   end
 end

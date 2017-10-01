@@ -20,24 +20,13 @@ defmodule AmazonProductAdvertisingClient do
     get %URI{scheme: @scheme, host: @host, path: @path, query: query}
   end
 
-  def call_api2(request_params, config \\ %Config{}) do
-    query = [request_params, config] |> combine_params2 |> percent_encode_query
-    get %URI{scheme: @scheme, host: @host, path: @path, query: query}
-  end
 
-
-  defp combine_params2(params_list) do
+  defp combine_params(params_list) do
     List.foldl params_list, Map.new, fn(params, all_params) ->
       Map.merge params, all_params
     end
   end
 
-
-  defp combine_params(params_list) do
-    List.foldl params_list, Map.new, fn(params, all_params) ->
-      Map.merge Map.from_struct(params), all_params
-    end
-  end
 
   # `URI.encode_query/1` explicitly does not percent-encode spaces, but Amazon requires `%20`
   # instead of `+` in the query, so we essentially have to rewrite `URI.encode_query/1` and
