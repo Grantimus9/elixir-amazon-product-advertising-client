@@ -19,7 +19,8 @@ defmodule AmazonProductAdvertisingClient.ItemSearch do
       "ResponseGroup": nil,
       "SearchIndex": "All",
       "Sort": nil,
-      "Title": nil
+      "Title": nil,
+      "MerchantId": "Amazon",
 
   @doc """
   Execute an ItemSearch operation
