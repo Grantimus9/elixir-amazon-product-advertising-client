@@ -27,8 +27,8 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
   defp package do
     [
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/zachgarwood/elixir-amazon-product-advertising-client"},
-      maintainers: ["Zach Garwood <zachgarwood@gmail.com>"]
+      links: %{"GitHub" => "https://github.com/Grantimus9/elixir-amazon-product-advertising-client"},
+      maintainers: ["Grant Nelson <grantmnelsn+oss@gmail.com>"]
     ]
   end
 end
