@@ -28,7 +28,8 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
     [
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/Grantimus9/elixir-amazon-product-advertising-client"},
-      maintainers: ["Grant Nelson <grantmnelsn+oss@gmail.com>"]
+      maintainers: ["Grant Nelson <grantmnelsn+oss@gmail.com>"],
+      source_url: "https://github.com/Grantimus9/elixir-amazon-product-advertising-client"
     ]
   end
 end
