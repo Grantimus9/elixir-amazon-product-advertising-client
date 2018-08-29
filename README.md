@@ -4,7 +4,16 @@ Amazon Product Advertising Client
 ## Configure
 Add your AWS authentication credentials to `config/config.exs`:
 
+Hex: https://hex.pm/packages/amazon_product_advertising_client
+
 ```elixir
+  # in your mix.exs
+  {:amazon_product_advertising_client, "~> 0.2.1"}
+```
+
+Then,
+```elixir
+# in your config/config.exs
 config :amazon_product_advertising_client,
   associate_tag: "YourAssociateTag",
   aws_access_key_id: "YourAccessKeyID",
@@ -45,7 +54,6 @@ end
 ### Lookup and Parse Response
 ```elixir
 # Modules needed.
-import AmazonProductAdvertisingClient
 alias AmazonProductAdvertisingClient.ItemLookup
 import SweetXml
 
