@@ -7,5 +7,4 @@ before_script:
   - mix deps.compile
   - mix compile
 script:
-  - mix dogma
   - mix test

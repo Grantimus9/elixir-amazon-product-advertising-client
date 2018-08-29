@@ -7,18 +7,21 @@ Add your AWS authentication credentials to `config/config.exs`:
 Hex: https://hex.pm/packages/amazon_product_advertising_client
 
 ```elixir
+
   # in your mix.exs
   {:amazon_product_advertising_client, "~> 0.2.1"}
+
 ```
 
-Then,
 ```elixir
+
 # in your config/config.exs
 config :amazon_product_advertising_client,
   associate_tag: "YourAssociateTag",
   aws_access_key_id: "YourAccessKeyID",
   aws_secret_access_key: "YourSecretAccessKey",
   marketplace_host: "webservices.amazon.ca" # If not specified the default value is webservices.amazon.com
+
 ```
 
 ## Usage and Examples
@@ -30,15 +33,18 @@ to parse the body using a library such as SweetXml.
 Create a search params struct and execute the search, for example:
 
 ```elixir
+
 alias AmazonProductAdvertisingClient.ItemSearch
 
 def search_for_item do
   %ItemSearch{"MaximumPrice": "25", "Keywords": "long sleeve shirt"} |> ItemSearch.execute
 end
+
 ```
 
 ### Lookup
 ```elixir
+
 alias AmazonProductAdvertisingClient.ItemLookup
 
 # e.g. an ISBN of 9781680502992
@@ -49,10 +55,12 @@ def lookup_book_by_isbn(isbn) do
       SearchIndex: "Books"}
   |> ItemLookup.execute()
 end
+
 ```
 
 ### Lookup and Parse Response
 ```elixir
+
 # Modules needed.
 alias AmazonProductAdvertisingClient.ItemLookup
 import SweetXml
