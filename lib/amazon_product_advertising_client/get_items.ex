@@ -7,15 +7,13 @@ defmodule AmazonProductAdvertisingClient.GetItems do
 
   defstruct(
     "ItemIds": nil,
-    "Condition": nil,
     "ItemIdType": nil,
+
+    "Condition": nil,
     "CurrencyOfPreference": nil,
     "LanguagesOfPreference": nil,
-    "Marketplace": nil,
     "Merchant": nil,
     "OfferCount": nil,
-    "PartnerTag": nil,
-    "PartnerType": nil,
     "Properties": nil,
     "Resources": nil
   )

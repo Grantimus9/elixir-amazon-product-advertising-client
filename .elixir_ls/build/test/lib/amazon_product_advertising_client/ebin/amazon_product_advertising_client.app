@@ -4,6 +4,7 @@
               {description,"An Amazon Product Advertising API client for Elixir"},
               {modules,['Elixir.AmazonProductAdvertisingClient',
                         'Elixir.AmazonProductAdvertisingClient.Config',
-                        'Elixir.AmazonProductAdvertisingClient.GetItems']},
+                        'Elixir.AmazonProductAdvertisingClient.GetItems',
+                        'Elixir.AmazonProductAdvertisingClient.SearchItems']},
               {registered,[]},
               {vsn,"0.3.0"}]}.

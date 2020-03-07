@@ -34,7 +34,7 @@ defmodule AmazonProductAdvertisingClient do
   end
 
   defp combine_params(params_list) do
-    List.foldl(params_list, %{}, fn(params, all_params) ->
+    List.foldr(params_list, %{}, fn(params, all_params) ->
       Map.merge(all_params, Map.from_struct(params))
     end)
     |> Enum.filter(fn {_, v} -> v end)
