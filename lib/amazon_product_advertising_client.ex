@@ -3,65 +3,109 @@ defmodule AmazonProductAdvertisingClient do
   An Amazon Product Advertising API client for Elixir
   """
 
-  use HTTPoison.Base
   use Timex
-
   alias AmazonProductAdvertisingClient.Config
 
-  @scheme "http"
-  @host    Application.get_env(:amazon_product_advertising_client, :marketplace_host, "webservices.amazon.com")
-  @path   "/onca/xml"
+  @scheme "https"
+  @host Application.get_env(:amazon_product_advertising_client, :marketplace_host, "webservices.amazon.com")
+  @aws4_request "aws4_request"
+  @hmac_algorithm "AWS4-HMAC-SHA256"
+  @service_name "ProductAdvertisingAPI"
 
   @doc """
   Make a call to the API with the specified request parameters.
   """
-  def call_api(request_params, config \\ %Config{}) do
-    query = [request_params, config] |> combine_params |> percent_encode_query
-    get %URI{scheme: @scheme, host: @host, path: @path, query: query}
+  def call_api(target, path, payload_params, config \\ %Config{}) do
+    payload = [payload_params, config] |> combine_params |> Jason.encode!()
+    date = Timex.now()
+    opts = %{
+      method_name: "POST",
+      region_name: "us-east-1",
+      payload: payload,
+      target: target,
+      path: path,
+      date: Timex.format!(date, "%Y%m%d", :strftime),
+      timestamp: Timex.format!(date, "%Y%m%dT%H%M%SZ", :strftime),
+    }
+
+    uri = %URI{scheme: @scheme, host: @host, path: path}
+    headers = build_headers(opts)
+    HTTPoison.post(uri, payload, headers)
   end
 
   defp combine_params(params_list) do
-    List.foldl params_list, Map.new, fn(params, all_params) ->
-      Map.merge Map.from_struct(params), all_params
-    end
+    List.foldl(params_list, %{}, fn(params, all_params) ->
+      Map.merge(all_params, Map.from_struct(params))
+    end)
+    |> Enum.filter(fn {_, v} -> v end)
+    |> Enum.into(%{})
   end
 
-  # `URI.encode_query/1` explicitly does not percent-encode spaces, but Amazon requires `%20`
-  # instead of `+` in the query, so we essentially have to rewrite `URI.encode_query/1` and
-  # `URI.pair/1`.
-  defp percent_encode_query(query_map) do
-    Enum.map_join(query_map, "&", &pair/1)
+  defp build_headers(opts) do
+    headers = [
+      {"content-encoding", "amz-1.0"},
+      {"content-type", "application/json; charset=utf-8"},
+      {"host", @host},
+      {"x-amz-date", opts.timestamp},
+      {"x-amz-target", opts.target},
+    ]
+    # Note: At this point, headers must be sorted alphabetically
+
+    {canonical_url, signed_headers} = prepare_canonical_request(headers, opts);
+    string_to_sign = prepare_string_to_sign(canonical_url, opts)
+
+    signature = calculate_signature(string_to_sign, opts)
+    authorization = build_authorization_string(signature, signed_headers, opts)
+
+    headers ++ [{"Authorization", authorization}]
   end
 
-  # See comment on `percent_encode_query/1`.
-  defp pair({k, v}) do
-    URI.encode(Kernel.to_string(k), &URI.char_unreserved?/1) <>
-    "=" <> URI.encode(Kernel.to_string(v), &URI.char_unreserved?/1)
+  defp prepare_canonical_request(headers, opts) do
+    headers_string = Enum.map(headers, fn {k, v} -> "#{k}:#{v}" end) |> Enum.join("\n")
+    signed_header = Enum.map(headers, &elem(&1, 0)) |> Enum.join(";")
+
+    canonical_url = ""
+      <> opts.method_name <> "\n"
+      <> opts.path <> "\n\n"
+      <> headers_string <> "\n\n"
+      <> signed_header <> "\n"
+      <> generate_hex(opts.payload)
+
+    {canonical_url, signed_header}
   end
 
-  def process_url(url) do
-    url |> URI.parse |> timestamp_url |> sign_url |> String.Chars.to_string
+  defp prepare_string_to_sign(canonical_url, opts) do
+    ""
+    <> @hmac_algorithm <> "\n"
+    <> opts.timestamp <> "\n"
+    <> opts.date <> "/" <> opts.region_name <> "/" <> @service_name <> "/" <> @aws4_request <> "\n"
+    <> generate_hex(canonical_url)
   end
 
-  defp timestamp_url(url_parts) do
-    update_url url_parts, "Timestamp", Timex.format!(Timex.local, "{ISO:Extended:Z}")
+  defp calculate_signature(string_to_sign, opts) do
+    signature_key = get_signature_key(opts)
+
+    :crypto.hmac(:sha256, signature_key, string_to_sign)
+    |> Base.encode16(case: :lower)
   end
 
-  defp sign_url(url_parts) do
-    hmac = :crypto.hmac(
-        :sha256,
-        Application.get_env(:amazon_product_advertising_client, :aws_secret_access_key),
-        Enum.join(["GET", url_parts.host, url_parts.path, url_parts.query], "\n")
-      )
-    signature = Base.encode64(hmac)
-    update_url url_parts, "Signature", signature
+  defp build_authorization_string(signature, signed_headers, opts) do
+    access_key = Application.get_env(:amazon_product_advertising_client, :aws_access_key)
+    "#{@hmac_algorithm} Credential=#{access_key}/#{opts.date}/#{opts.region_name}/#{@service_name}/#{@aws4_request}, SignedHeaders=#{signed_headers}, Signature=#{signature}"
   end
 
-  defp update_url(url_parts, key, value) do
-    updated_query = url_parts.query
-                        |> URI.decode_query
-                        |> Map.put_new(key, value)
-                        |> percent_encode_query
-    Map.put url_parts, :query, updated_query
+  defp generate_hex(data) do
+    :crypto.hash(:sha256, data)
+    |> Base.encode16(case: :lower)
+  end
+
+  defp get_signature_key(opts) do
+    key = Application.get_env(:amazon_product_advertising_client, :aws_secret_access_key)
+    k_secret = "AWS4" <> key
+    k_date = :crypto.hmac(:sha256, k_secret, opts.date)
+    k_region = :crypto.hmac(:sha256, k_date, opts.region_name)
+    k_service = :crypto.hmac(:sha256, k_region, @service_name)
+
+    :crypto.hmac(:sha256, k_service, @aws4_request)
   end
 end

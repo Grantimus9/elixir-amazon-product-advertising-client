@@ -1,0 +1,9 @@
+{application,amazon_product_advertising_client,
+             [{applications,[kernel,stdlib,elixir,logger,jason,timex,
+                             httpoison]},
+              {description,"An Amazon Product Advertising API client for Elixir"},
+              {modules,['Elixir.AmazonProductAdvertisingClient',
+                        'Elixir.AmazonProductAdvertisingClient.Config',
+                        'Elixir.AmazonProductAdvertisingClient.GetItems']},
+              {registered,[]},
+              {vsn,"0.3.0"}]}.
