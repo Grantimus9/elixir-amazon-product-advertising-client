@@ -90,7 +90,7 @@ defmodule AmazonProductAdvertisingClient do
   end
 
   defp build_authorization_string(signature, signed_headers, opts) do
-    access_key = Application.get_env(:amazon_product_advertising_client, :aws_access_key)
+    access_key = Application.get_env(:amazon_product_advertising_client, :aws_access_key_id)
     "#{@hmac_algorithm} Credential=#{access_key}/#{opts.date}/#{opts.region_name}/#{@service_name}/#{@aws4_request}, SignedHeaders=#{signed_headers}, Signature=#{signature}"
   end
 

@@ -6,16 +6,16 @@ defmodule AmazonProductAdvertisingClient.GetItems do
   alias AmazonProductAdvertisingClient.{GetItems, Config}
 
   defstruct(
-    "ItemIds": nil,
-    "ItemIdType": nil,
+    ItemIds: nil,
+    ItemIdType: nil,
 
-    "Condition": nil,
-    "CurrencyOfPreference": nil,
-    "LanguagesOfPreference": nil,
-    "Merchant": nil,
-    "OfferCount": nil,
-    "Properties": nil,
-    "Resources": nil
+    Condition: nil,
+    CurrencyOfPreference: nil,
+    LanguagesOfPreference: nil,
+    Merchant: nil,
+    OfferCount: nil,
+    Properties: nil,
+    Resources: nil
   )
 
   @doc """
