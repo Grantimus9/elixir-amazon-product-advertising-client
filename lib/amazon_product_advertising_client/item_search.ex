@@ -17,9 +17,10 @@ defmodule AmazonProductAdvertisingClient.ItemSearch do
       "MinimumPrice": nil,
       "Operation": "ItemSearch",
       "ResponseGroup": nil,
-      "SearchIndex": nil,
+      "SearchIndex": "All",
       "Sort": nil,
-      "Title": nil
+      "Title": nil,
+      "MerchantId": "Amazon"
 
   @doc """
   Execute an ItemSearch operation
