@@ -1,6 +1,8 @@
 Amazon Product Advertising Client
 ================================
 
+https://webservices.amazon.com/paapi5/documentation
+
 ## Configure
 Add your AWS authentication credentials to `config/config.exs`:
 
@@ -24,32 +26,32 @@ config :amazon_product_advertising_client,
 
 ## Usage and Examples
 
-### Lookup
+### GetItems
 ```elixir
 
 alias AmazonProductAdvertisingClient.GetItems
-
-# e.g. an ISBN of 9781680502992
-def lookup_book_by_isbn(isbn) do
-  %GetItems{ItemIds: [isbn]}
+# Lookup by ASIN
+def lookup_by_asin(asin) when is_binary(asin) do
+  %GetItems{ItemIds: [asin]}
   |> GetItems.execute()
 end
 
 ```
 
-### Lookup and Parse Response
+### SearchItems
+
+An example of searching by ISBN
 ```elixir
 
-# Modules needed.
-alias AmazonProductAdvertisingClient.GetItems
+alias AmazonProductAdvertisingClient.SearchItems
 
-# Returns a map with 'title' and 'detail_page_url' keys
-def lookup_book_info(isbn) do
-  lookup_struct = GetItems{ItemIds: [isbn]}
+# e.g. an ISBN of "9781680502992"
+def lookup_book_info(isbn) when is_binary(isbn) do
+  lookup_struct = %SearchItems{Keywords: isbn}
 
-  case GetItems.execute(lookup_struct) do
+  case SearchItems.execute(lookup_struct) do
     {:ok, %HTTPoison.Response{body: body}} ->
-      body |> Jase.decodde!()
+      body |> Jason.decode!()
   end
 
 end
