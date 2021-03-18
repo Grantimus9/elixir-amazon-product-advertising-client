@@ -18,7 +18,7 @@ defmodule AmazonProductAdvertisingClient.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.19.0", only: :dev, runtime: false},
       {:jason, "~> 1.0"},
       {:httpoison, "~> 1.0"},
       {:timex, "~> 3.1"}
