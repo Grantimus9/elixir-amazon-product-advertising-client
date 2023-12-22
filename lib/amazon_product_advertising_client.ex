@@ -85,7 +85,7 @@ defmodule AmazonProductAdvertisingClient do
   defp calculate_signature(string_to_sign, opts) do
     signature_key = get_signature_key(opts)
 
-    :crypto.hmac(:sha256, signature_key, string_to_sign)
+    :crypto.mac(:hmac, :sha256, signature_key, string_to_sign)
     |> Base.encode16(case: :lower)
   end
 
@@ -102,10 +102,10 @@ defmodule AmazonProductAdvertisingClient do
   defp get_signature_key(opts) do
     key = Application.get_env(:amazon_product_advertising_client, :aws_secret_access_key)
     k_secret = "AWS4" <> key
-    k_date = :crypto.hmac(:sha256, k_secret, opts.date)
-    k_region = :crypto.hmac(:sha256, k_date, opts.region_name)
-    k_service = :crypto.hmac(:sha256, k_region, @service_name)
+    k_date = :crypto.mac(:hmac, :sha256, k_secret, opts.date)
+    k_region = :crypto.mac(:hmac, :sha256, k_date, opts.region_name)
+    k_service = :crypto.mac(:hmac, :sha256, k_region, @service_name)
 
-    :crypto.hmac(:sha256, k_service, @aws4_request)
+    :crypto.mac(:hmac, :sha256, k_service, @aws4_request)
   end
 end
